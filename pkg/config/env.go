@@ -10,10 +10,12 @@ import (
 )
 
 type Enviroment struct {
-	SMTP     string
-	Port     int
-	Sender   string
-	Password string
+	EMAIL_SMTP     string
+	EMAIL_PORT     int
+	EMAIL_SENDER   string
+	EMAIL_USER     string
+	EMAIL_PASSWORD string
+	WORKER_NUM     int
 }
 
 var Env Enviroment
@@ -23,9 +25,12 @@ func LoadEnv() {
 		log.Fatal(err)
 	}
 
-	Env.SMTP = os.Getenv("EMAIL_SMTP")
-	Env.Port, _ = conv.Int(os.Getenv("EMAIL_PORT"))
-	Env.Sender = os.Getenv("EMAIL_SENDER")
-	Env.Password = os.Getenv("EMAIL_PASSWORD")
-	fmt.Println(Env)
+	Env.EMAIL_SMTP = os.Getenv("EMAIL_SMTP")
+	Env.EMAIL_PORT, _ = conv.Int(os.Getenv("EMAIL_PORT"))
+	Env.EMAIL_SENDER = os.Getenv("EMAIL_SENDER")
+	Env.EMAIL_USER = os.Getenv("EMAIL_USER")
+	Env.EMAIL_PASSWORD = os.Getenv("EMAIL_PASSWORD")
+	Env.WORKER_NUM, _ = conv.Int(os.Getenv("WORKER_NUM"))
+
+	fmt.Print("The environment was loaded successfully!\n\n")
 }
