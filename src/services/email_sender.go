@@ -9,37 +9,29 @@ import (
 	"gopkg.in/mail.v2"
 )
 
-func SendEmail(job e.EmailJob, smtp config.SMTPConfig) error {
+func SendEmail(job *e.EmailJob, smtp config.SMTPConfig) error {
 	mailer := mail.NewMessage()
 
 	mailer.SetHeaders(map[string][]string{
-		"From":    {smtp.Username},
+		"From":    {mailer.FormatAddress(smtp.Email, smtp.Username)},
 		"To":      {job.To},
 		"Subject": {job.Subject},
 	})
-	mailer.SetBody("text/plain", job.Body)
-	mailer.Attach(job.FilePath)
+	mailer.SetBody(job.ContentType, job.Body)
 
+	if job.HasFileToAttach() {
+		mailer.Attach(job.FilePath)
+	}
 	dialer := createMailDialer(smtp)
 
-	try := 2
-	var err error
-
-	for try > 0 {
-		if err = dialer.DialAndSend(mailer); err == nil {
-			break;
-		}
-		try--
-	}
-
-	if err != nil {
+	if err := dialer.DialAndSend(mailer); err == nil {
 		return fmt.Errorf("fail to send email: %w", err)
 	}
 	return nil
 }
 
-func createMailDialer(smtp config.SMTPConfig) *mail.Dialer {
-	dialer := mail.NewDialer(smtp.Host, smtp.Port, smtp.Username, smtp.Password)
+func createMailDialer(options config.SMTPConfig) *mail.Dialer {
+	dialer := mail.NewDialer(options.Host, options.Port, options.Email, options.Password)
 	dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
 	return dialer

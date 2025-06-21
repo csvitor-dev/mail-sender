@@ -15,7 +15,7 @@ var (
 	TotalRequests   = 0
 )
 
-func StartWorkerPool(workers int, jobs <-chan entities.EmailJob, smtp config.SMTPConfig) *sync.WaitGroup {
+func StartWorkerPool(workers int, jobs <-chan *entities.EmailJob, smtp config.SMTPConfig) *sync.WaitGroup {
 	var group sync.WaitGroup
 
 	for i := 1; i <= workers; i++ {
@@ -25,7 +25,7 @@ func StartWorkerPool(workers int, jobs <-chan entities.EmailJob, smtp config.SMT
 	return &group
 }
 
-func worker(id int, jobs <-chan entities.EmailJob, smtp config.SMTPConfig, group *sync.WaitGroup) {
+func worker(id int, jobs <-chan *entities.EmailJob, smtp config.SMTPConfig, group *sync.WaitGroup) {
 	defer group.Done()
 
 	for job := range jobs {

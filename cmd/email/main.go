@@ -11,9 +11,9 @@ import (
 
 func main() {
 	smtpConfig := config.NewSMTP()
-	numWorkers := 2
+	numWorkers := config.Env.WORKER_NUM
 
-	jobs := make(chan entities.EmailJob, 100)
+	jobs := make(chan *entities.EmailJob, 100)
 	wg := src_service.StartWorkerPool(numWorkers, jobs, smtpConfig)
 
 	services.LoadFiles(jobs)

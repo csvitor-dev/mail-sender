@@ -4,7 +4,7 @@ import (
 	"github.com/csvitor-dev/mail-sender/internal/entities"
 )
 
-func LoadFiles(jobs chan<- entities.EmailJob) error {
+func LoadFiles(jobs chan<- *entities.EmailJob) error {
 	contentFromCC, err := readFile("cc.txt")
 
 	if err != nil {
@@ -23,7 +23,7 @@ func LoadFiles(jobs chan<- entities.EmailJob) error {
 		if err != nil {
 			return err
 		}
-		jobs <- entities.NewEmail(record[0], "Prova de Matemática Discreta [CC 2025.1]", bodyMessage, fileToAttach)
+		jobs <- entities.NewEmail(record[0], "Prova de Matemática Discreta [CC 2025.1]", bodyMessage, "text/plain", fileToAttach)
 	}
 
 	for _, record := range contentFromES {
@@ -32,7 +32,7 @@ func LoadFiles(jobs chan<- entities.EmailJob) error {
 		if err != nil {
 			return err
 		}
-		jobs <- entities.NewEmail(record[0], "Prova de Matemática Discreta [ES 2025.1]", bodyMessage, fileToAttach)
+		jobs <- entities.NewEmail(record[0], "Prova de Matemática Discreta [ES 2025.1]", bodyMessage, "text/plain", fileToAttach)
 	}
 	return nil
 }
