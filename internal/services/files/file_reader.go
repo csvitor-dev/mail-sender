@@ -1,4 +1,4 @@
-package services
+package files
 
 import (
 	"bufio"
@@ -17,7 +17,7 @@ func GetAbsolutePath(target, fileName string) (string, error) {
 	return absolutePath, nil
 }
 
-func readFile(fileName string) ([][]string, error) {
+func ReadFile(fileName string) ([][]string, error) {
 	path, err := GetAbsolutePath("internal/emails/", fileName)
 
 	if err != nil {
