@@ -39,6 +39,6 @@ func worker(id int, jobs <-chan *entities.EmailJob, smtp config.SMTPConfig, grou
 			SuccessRequests = append(SuccessRequests, job.To)
 		}
 		TotalRequests++
-		time.Sleep(time.Second * 10)
+		time.Sleep(time.Second * 5)
 	}
 }

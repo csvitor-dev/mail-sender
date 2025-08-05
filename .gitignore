@@ -1,4 +1,4 @@
-emails/
-files/
+internal/emails/
+internal/files/
 .env*
 !.env.example
