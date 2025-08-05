@@ -15,10 +15,10 @@ func LoadFiles(jobs chan<- *entities.EmailJob) error {
 	if err != nil {
 		return err
 	}
-	bodyMessage := "Segue em anexo a primeira prova de Matemática Discreta.\n\nAtenciosamente,\nVitor Costa de Sousa"
+	bodyMessage := "Segue em anexo a terceira prova de Matemática Discreta.\n\nAtenciosamente,\nVitor Costa de Sousa"
 
 	for _, record := range contentFromCC {
-		fileToAttach, err := GetAbsolutePath("internal/files/cc/", record[1])
+		fileToAttach, err := GetAbsolutePath("internal/files/cc3/", record[1])
 
 		if err != nil {
 			return err
@@ -27,7 +27,7 @@ func LoadFiles(jobs chan<- *entities.EmailJob) error {
 	}
 
 	for _, record := range contentFromES {
-		fileToAttach, err := GetAbsolutePath("internal/files/es/", record[1])
+		fileToAttach, err := GetAbsolutePath("internal/files/es3/", record[1])
 
 		if err != nil {
 			return err

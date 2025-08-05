@@ -16,6 +16,6 @@ func NewSMTP() SMTPConfig {
 		Port:     Env.EMAIL_PORT,
 		Email:    Env.EMAIL_SENDER,
 		Username: Env.EMAIL_USER,
-		Password: Env.EMAIL_SENDER,
+		Password: Env.EMAIL_PASSWORD,
 	}
 }
