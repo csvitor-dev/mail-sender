@@ -1,18 +1,22 @@
 package cli
 
 import (
+	"bufio"
 	"fmt"
 	"log"
+	"os"
+	"strings"
 )
 
 func Prompt(message string) string {
-	var input string
 	fmt.Printf("%s: ", message)
-	_, err := fmt.Scanln(&input)
+	reader := bufio.NewReader(os.Stdin)
+
+	input, err := reader.ReadString('\n')
 
 	if err != nil {
 		log.Fatalf("Error reading input: %v", err)
 		return ""
 	}
-	return input
+	return strings.TrimSpace(input)
 }
