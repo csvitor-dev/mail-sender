@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/csvitor-dev/mail-sender/internal/entities"
-	"github.com/csvitor-dev/mail-sender/pkg/config"
 )
 
 var (
@@ -15,23 +14,23 @@ var (
 	TotalRequests   = 0
 )
 
-func StartWorkerPool(workers int, jobs <-chan *entities.EmailJob, smtp config.SMTPConfig) *sync.WaitGroup {
+func StartWorkerPool(workers int, jobs <-chan *entities.EmailJob) *sync.WaitGroup {
 	var group sync.WaitGroup
 
 	for i := 1; i <= workers; i++ {
 		group.Add(1)
-		go worker(i, jobs, smtp, &group)
+		go worker(i, jobs, &group)
 	}
 	return &group
 }
 
-func worker(id int, jobs <-chan *entities.EmailJob, smtp config.SMTPConfig, group *sync.WaitGroup) {
+func worker(id int, jobs <-chan *entities.EmailJob, group *sync.WaitGroup) {
 	defer group.Done()
 
 	for job := range jobs {
 		log.Printf("Worker [%d]: Job processing for %v\n", id, job.To)
 
-		if err := SendEmail(job, smtp); err != nil {
+		if err := SendEmailByResend(job); err != nil {
 			log.Printf("Worker [%d]: Fail to send email for %v: %v", id, job.To, err)
 			FailRequests = append(FailRequests, job.To)
 		} else {

@@ -22,7 +22,12 @@ func LoadFromFiles(courseAndProofNum, subject, bodyMessage string, jobs chan<- *
 		if err != nil {
 			return err
 		}
-		jobs <- entities.NewEmail(record[0], subject, bodyMessage, "text/plain", fileToAttach)
+		job, err := entities.NewEmail(record[0], subject, bodyMessage, "application/pdf", fileToAttach)
+
+		if err != nil {
+			return err
+		}
+		jobs <- job
 	}
 	return nil
 }
