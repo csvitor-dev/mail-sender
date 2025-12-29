@@ -4,17 +4,18 @@ import (
 	"log"
 	"strings"
 
+	"github.com/csvitor-dev/mail-sender/internal/config"
 	"github.com/csvitor-dev/mail-sender/internal/entities"
 	"github.com/csvitor-dev/mail-sender/internal/services/files"
 	"github.com/csvitor-dev/mail-sender/pkg/cli"
-	"github.com/csvitor-dev/mail-sender/pkg/config"
 	src_service "github.com/csvitor-dev/mail-sender/src/services"
 )
 
-func main() {
-	smtpConfig := config.NewSMTP()
-	numWorkers := config.Env.WORKER_NUM
+func init() {
+	config.LoadEnv()
+}
 
+func main() {
 	courseAndProofNum := strings.ToLower(cli.Prompt("Enter the target course (CC or ES) with number (1, 2, 3)"))
 
 	if courseAndProofNum[:2] != "cc" && courseAndProofNum[:2] != "es" {
@@ -24,7 +25,7 @@ func main() {
 	bodyMessage := cli.Prompt("Enter the body message for the emails")
 
 	jobs := make(chan *entities.EmailJob, 100)
-	wg := src_service.StartWorkerPool(numWorkers, jobs, smtpConfig)
+	wg := src_service.StartWorkerPool(config.Env.WORKER_NUM, jobs)
 
 	files.LoadFromFiles(courseAndProofNum, subject, bodyMessage, jobs)
 	close(jobs)

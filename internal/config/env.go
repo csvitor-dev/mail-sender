@@ -10,6 +10,7 @@ import (
 )
 
 type Enviroment struct {
+	API_KEY        string
 	EMAIL_SMTP     string
 	EMAIL_PORT     int
 	EMAIL_SENDER   string
@@ -25,6 +26,7 @@ func LoadEnv() {
 		log.Fatal(err)
 	}
 
+	Env.API_KEY = os.Getenv("API_KEY")
 	Env.EMAIL_SMTP = os.Getenv("EMAIL_SMTP")
 	Env.EMAIL_PORT, _ = conv.Int(os.Getenv("EMAIL_PORT"))
 	Env.EMAIL_SENDER = os.Getenv("EMAIL_SENDER")
